@@ -1,10 +1,21 @@
 import React, { useState } from "react";
-import Button from "./Button";
 
 function Add({ add }) {
   const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const onsubmit = (e) => {
+    e.preventDefault();
+    if (!name || !price) {
+      alert("Ingresa nombre y precio");
+      return;
+    }
+    add({ name: name, price: price });
+    alert(name);
+    setName("");
+    setPrice("");
+  };
   return (
-    <div>
+    <form onSubmit={onsubmit}>
       <input
         onChange={(e) => setName(e.target.value)}
         value={name}
@@ -12,10 +23,15 @@ function Add({ add }) {
         name=""
         id=""
       />
-      {name}
-      <input type="text" name="" id="" />
-      <Button name="Agregar" />
-    </div>
+      <input
+        onChange={(e) => setPrice(e.target.value)}
+        value={price}
+        type="text"
+        name=""
+        id=""
+      />
+      <input type="submit" value="Add" />
+    </form>
   );
 }
 
