@@ -1,14 +1,13 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useState } from "react";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Button from "./components/Button";
-import List from "./components/List";
+import List from "./pages/List";
 import Add from "./components/Add";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ResponsiveAppBar from "./components/AppBar";
-import CredentialsSignInPage from "./components/Login";
+import LoginProfe from "./pages/LoginProfe";
+import Home from "./pages/Home";
 
 function App() {
   const [items, setItems] = useState([
@@ -16,7 +15,8 @@ function App() {
     { id: 2, name: "item2", price: 2 },
     { id: 3, name: "item3", price: 3 },
   ]);
-  let [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
+  const [isLogin, setIsLogin] = useState(false);
   const sum = () => {
     setCount(count + 1);
   };
@@ -30,18 +30,28 @@ function App() {
   const del = (id) => {
     setItems(items.filter((item) => item.id !== id));
   };
+  const loginProfe = (user) => {
+    let isLogin = false;
+    if (user.username === "Hugol" && user.password === "1234") {
+      setIsLogin(true);
+    }
+    return isLogin;
+  };
+  const setLogout = () => {
+    setIsLogin(false);
+  };
   return (
     <div>
       <BrowserRouter>
-        <ResponsiveAppBar />
-        <Header />
+        {isLogin && <ResponsiveAppBar setLogout={setLogout} />}
         <Routes>
-          <Route path="/" element={<CredentialsSignInPage />} />
+          <Route path="/" element={<LoginProfe loginProfe={loginProfe} />} />
           <Route path="/add" element={<Add add={add} />} />
           <Route
             path="/items"
             element={<List items={items} ondelete={del} />}
           />
+          <Route path="/home" element={<Home />} />
         </Routes>
         <Footer />
       </BrowserRouter>
