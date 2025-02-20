@@ -13,23 +13,19 @@ const Home = () => {
     <div style={{ textAlign: "center", padding: "20px" }}>
       <h1>Página de Inicio</h1>
       <p>Bienvenido a la página de inicio de Abarrotes Ochoa.</p>
-
-      {/* Imagen más grande */}
       <img
         src="https://almomento.mx/wp-content/uploads/2018/04/abarrotes.jpg"
         alt="Logo de Abarrotes Ochoa"
         style={{ width: "600px", height: "auto" }}
       />
-
-      {/* Lista de productos */}
       <h2>Lista de Productos</h2>
-      <ol>
+      <ul>
         {productos.map((producto) => (
           <li key={producto.id}>
             {producto.nombre} - ${producto.precio} MXN
           </li>
         ))}
-      </ol>
+      </ul>
     </div>
   );
 };
