@@ -1,6 +1,6 @@
-import logo from "./logo.svg";
+//import logo from "./logo.svg";
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import List from "./pages/List";
 import Add from "./components/Add";
@@ -10,32 +10,58 @@ import LoginProfe from "./pages/LoginProfe";
 import Home from "./pages/Home";
 
 function App() {
-  const [items, setItems] = useState([
-    { id: 1, name: "item1", price: 1 },
-    { id: 2, name: "item2", price: 2 },
-    { id: 3, name: "item3", price: 3 },
-  ]);
-  const [count, setCount] = useState(0);
+  const [items, setItems] = useState([]);
+  // const [count, setCount] = useState(0);
   const [isLogin, setIsLogin] = useState(false);
-  const sum = () => {
+  useEffect(() => {
+    if (isLogin) {
+      getItems();
+    }
+  }, [isLogin]);
+  const getItems = async () => {
+    const result = await fetch("http://localhost:5500/items/");
+    const data = await result.json();
+    setItems(data);
+  };
+  /*   const sum = () => {
     setCount(count + 1);
   };
   const resta = () => {
     setCount(count - 1);
+  }; */
+  const add = async (item) => {
+    // item.id = items.length + 1;
+    const result = await fetch("http://localhost:5500/items/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(item),
+    });
+    const data = await result.json();
+    setItems([...items, data.item]); //spread operator
   };
-  const add = (item) => {
-    item.id = items.length + 1;
-    setItems([...items, item]); //spread operator
-  };
-  const del = (id) => {
+  const del = async (id) => {
+    await fetch("http://localhost:5500/items/" + id, { method: "DELETE" });
     setItems(items.filter((item) => item.id !== id));
   };
-  const loginProfe = (user) => {
-    let isLogin = false;
-    if (user.username === "Hugol" && user.password === "1234") {
-      setIsLogin(true);
-    }
-    return isLogin;
+  const loginProfe = async (user) => {
+    //let isLogin = false;
+    const result = await fetch("http://localhost:5500/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+    const data = await result.json();
+    setIsLogin(data.isLogin);
+    return data.isLogin;
+    // console.log(data);
+    // if (user.username === "admin" && user.password === "adminpass") {
+    //   setIsLogin(true);
+    // }
+    // return isLogin;
   };
   const setLogout = () => {
     setIsLogin(false);
