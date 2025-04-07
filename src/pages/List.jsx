@@ -5,8 +5,10 @@ const List = ({ items, ondelete }) => {
   return (
     <>
       {items.map((i) => (
-        <Item item={i} key={i.id} ondelete={ondelete} />
+        <Item item={i} key={i._id} ondelete={ondelete} />
+        
       ))}
+      
     </>
   );
 };

@@ -18,8 +18,22 @@ function App() {
       getItems();
     }
   }, [isLogin]);
+  /*
   const getItems = async () => {
     const result = await fetch("http://localhost:5500/items/");
+    const data = await result.json();
+    setItems(data);
+  };
+  */
+  const getItems = async () => {
+    const token = localStorage.getItem("token");
+  
+    const result = await fetch("http://localhost:5500/items2/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  
     const data = await result.json();
     setItems(data);
   };
@@ -29,6 +43,7 @@ function App() {
   const resta = () => {
     setCount(count - 1);
   }; */
+  /*
   const add = async (item) => {
     // item.id = items.length + 1;
     const result = await fetch("http://localhost:5500/items/", {
@@ -41,27 +56,61 @@ function App() {
     const data = await result.json();
     setItems([...items, data.item]); //spread operator
   };
+  */
+  const add = async (item) => {
+    const token = localStorage.getItem("token");
+  
+    const result = await fetch("http://localhost:5500/items2/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(item),
+    });
+  
+    const data = await result.json();
+    setItems([...items, data]);
+  };
+  /*
   const del = async (id) => {
     await fetch("http://localhost:5500/items/" + id, { method: "DELETE" });
     setItems(items.filter((item) => item.id !== id));
   };
+  */
+  const del = async (id) => {
+    const token = localStorage.getItem("token");
+  
+    await fetch(`http://localhost:5500/items2/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  
+    setItems(items.filter((item) => item._id !== id)); // Mongo usa _id
+  };
+  
   const loginProfe = async (user) => {
-    //let isLogin = false;
-    const result = await fetch("http://localhost:5500/login/", {
+    const result = await fetch("http://localhost:5500/login2", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
     });
+
     const data = await result.json();
-    setIsLogin(data.isLogin);
-    return data.isLogin;
-    // console.log(data);
-    // if (user.username === "admin" && user.password === "adminpass") {
-    //   setIsLogin(true);
-    // }
-    // return isLogin;
+    console.log("Respuesta del login:", data);
+
+    if (data.isLogin && data.token) {
+      localStorage.setItem("token", data.token);
+      setIsLogin(true);
+      return true;
+    } else {
+      setIsLogin(false);
+      return false;
+    }
   };
   const setLogout = () => {
     setIsLogin(false);

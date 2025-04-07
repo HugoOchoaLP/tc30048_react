@@ -8,7 +8,7 @@ const Item = ({ item, ondelete }) => {
         <li>{item.name}</li>
         <li>{item.price}</li>
         <li>
-          <Button click={() => ondelete(item.id)} name={"X"} />
+          <Button click={() => ondelete(item._id)} name={"X"} />
         </li>
       </ul>
     </div>
@@ -16,3 +16,4 @@ const Item = ({ item, ondelete }) => {
 };
 
 export default Item;
+

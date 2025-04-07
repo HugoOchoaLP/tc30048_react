@@ -14,7 +14,7 @@ const Home = () => {
       <h1>Página de Inicio</h1>
       <p>Bienvenido a la página de inicio de Abarrotes Ochoa.</p>
       <img
-        src="https://almomento.mx/wp-content/uploads/2018/04/abarrotes.jpg"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFkf8TwBrLhaZnGw3mtg0wU52JntNI3haFbg&s"
         alt="Logo de Abarrotes Ochoa"
         style={{ width: "600px", height: "auto" }}
       />
